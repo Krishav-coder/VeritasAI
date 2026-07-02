@@ -1,47 +1,42 @@
+"""
+Veritas AI - Main Application Entry Point
+Deepfake Detection with Explainable AI
+"""
+
+import os
 import sys
 
-MODULE_PATH = "/content/drive/MyDrive/VeritasAI/module"
+# Get the directory where this file is located
+BASE_DIR = os.path.dirname(os.path.abspath(__file__))
+MODULE_PATH = os.path.join(BASE_DIR, "module")
 
 if MODULE_PATH not in sys.path:
     sys.path.insert(0, MODULE_PATH)
 
+# Import modules using relative paths
+from module import detector, llm
 
 
-import importlib.util
-
-# -----------------------------
-# Load Detector Module
-# -----------------------------
-detector_spec = importlib.util.spec_from_file_location(
-    "detector",
-    "/content/drive/MyDrive/VeritasAI/module/detector.py"
-)
-
-detector = importlib.util.module_from_spec(detector_spec)
-detector_spec.loader.exec_module(detector)
-
-
-# -----------------------------
-# Load LLM Module
-# -----------------------------
-llm_spec = importlib.util.spec_from_file_location(
-    "llm",
-    "/content/drive/MyDrive/VeritasAI/module/llm.py"
-)
-
-llm = importlib.util.module_from_spec(llm_spec)
-llm_spec.loader.exec_module(llm)
-
-
-# -----------------------------
-# Main API
-# -----------------------------
 def analyze_and_explain(image_path):
-
+    """
+    Main API function for analyzing an image and generating explanation.
+    
+    Args:
+        image_path: Path to the image file to analyze
+        
+    Returns:
+        dict: Contains prediction, confidence, model_version, heatmap_path, 
+              limitations, and explanation
+    """
     result = detector.analyze_image(image_path)
-
     explanation = llm.generate_explanation(result)
-
     result["explanation"] = explanation
-
     return result
+
+
+if __name__ == "__main__":
+    # Test the function
+    import tempfile
+    print("â Veritas AI backend loaded successfully")
+    print(f"   Base directory: {BASE_DIR}")
+    print(f"   Module path: {MODULE_PATH}")

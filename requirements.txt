@@ -1,0 +1,18 @@
+# Veritas AI - Deepfake Detection Platform
+# Production Requirements
+
+# Core Framework
+streamlit>=1.28.0
+
+# Deep Learning & Computer Vision
+tensorflow>=2.13.0
+opencv-python>=4.8.0
+numpy>=1.24.0
+Pillow>=10.0.0
+
+# AI Explanations (Optional - for LLM features)
+transformers>=4.35.0
+torch>=2.0.0
+accelerate>=0.24.0
+
+# Utilities
