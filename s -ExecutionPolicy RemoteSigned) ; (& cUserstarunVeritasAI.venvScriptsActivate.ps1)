@@ -1,0 +1,266 @@
+[33mcommit 77e33b316955512fc89a70019d057c7ab351fd61[m[33m ([m[1;36mHEAD[m[33m -> [m[1;32mmain[m[33m, [m[1;31morigin/main[m[33m)[m
+Author: Krishav-coder <tarunparihar7272@gmail.com>
+Date:   Sun Jul 12 11:31:35 2026 +0530
+
+    Restructure README with research findings section
+
+[1mdiff --git a/README.md b/README.md[m
+[1mindex 5dc84276..d0e19df9 100644[m
+[1m--- a/README.md[m
+[1m+++ b/README.md[m
+[36m@@ -1 +1,253 @@[m
+[31m-# Veritas AI - Deepfake Detection Platform\n\n[![Python](https://img.shields.io/badge/Python-3.9+-blue.svg)](https://python.org)\n[![TensorFlow](https://img.shields.io/badge/TensorFlow-2.13+-orange.svg)](https://tensorflow.org)\n[![Streamlit](https://img.shields.io/badge/Streamlit-1.28+-red.svg)](https://streamlit.io)\n\nA production-grade AI-powered deepfake detection application with explainable AI capabilities.\n\n![Veritas AI](https://img.shields.io/badge/Veritas-AI-6366f1?style=for-the-badge)\n\n## Features\n\n- **Deep Learning Detection**: Xception-based neural network trained for deepfake classification\n- **Explainable AI**: Grad-CAM visualizations showing model attention regions\n- **AI Explanations**: Natural language explanations powered by Google's Gemma LLM\n- **Modern UI**: Professional dark-themed Streamlit interface\n- **Production Ready**: Optimized for deployment on Streamlit Community Cloud\n\n## Architecture\n\n```\nVeritas AI/\n├── app.py                 # Main backend entry point\n├── streamlit_app.py       # Streamlit frontend application\n├── requirements.txt       # Python dependencies\n├── module/\n│   ├── detector.py        # Xception-based detection model\n│   ├── gradcam.py         # Grad-CAM explainability\n│   └── llm.py             # Gemma-based explanation generation\n├── models/                # Model weights directory\n└── outputs/               # Grad-CAM output directory\n```\n\n## Quick Start\n\n### Local Development\n\n1. **Clone the repository**\n   ```bash\n   git clone <repository-url>\n   cd VeritasAI\n   ```\n\n2. **Create virtual environment**\n   ```bash\n   python -m venv venv\n   source venv/bin/activate  # On Windows: venv\\Scripts\\activate\n   ```\n\n3. **Install dependencies**\n   ```bash\n   pip install -r requirements.txt\n   ```\n\n4. **Download model weights**\n   \n   Place the trained model file at:\n   ```\n   models/veritas_xception_v2_finetuned.keras\n   ```\n\n5. **Run the application**\n   ```bash\n   streamlit run streamlit_app.py\n   ```\n\n6. **Open in browser**\n   \n   Navigate to `http://localhost:8501`\n\n### Streamlit Cloud Deployment\n\n1. **Fork/Upload to GitHub**\n   - Push the code to a GitHub repository\n\n2. **Connect to Streamlit Cloud**\n   - Go to [share.streamlit.io](https://share.streamlit.io)\n   - Connect your GitHub account\n   - Select the repository\n\n3. **Configure Secrets (Optional)**\n   \n   For LLM explanations, add Hugging Face token:\n   ```toml\n   # .streamlit/secrets.toml\n   HF_TOKEN = \"your_huggingface_token\"\n   ```\n\n4. **Deploy**\n   - Click \"Deploy\" and wait for the build\n\n## Backend Integration\n\nThe frontend communicates with the backend through the `app.analyze_and_explain()` function:\n\n```python\nfrom app import analyze_and_explain\n\nresult = analyze_and_explain(image_path)\n# Returns: {\n#     \"prediction\": \"Real\" | \"Fake\",\n#     \"confidence\": 87.5,\n#     \"model_version\": \"Veritas AI v2\",\n#     \"heatmap_path\": \"outputs/image_gradcam.jpg\",\n#     \"limitations\": [...],\n#     \"explanation\": \"AI-generated explanation...\"\n# }\n```\n\n## Model Requirements\n\n### Required Files\n\n- **Model**: `models/veritas_xception_v2_finetuned.keras`\n  - Xception-based deepfake detection model\n  - Input size: 299x299 pixels\n  - Output: Binary classification (Real/Fake)\n\n### Optional (for LLM explanations)\n\n- **Hugging Face Token**: Required to download Google Gemma model\n- **GPU**: Recommended for faster inference\n\n## API Reference\n\n### `app.analyze_and_explain(image_path)`\n\nMain entry point for image analysis.\n\n**Parameters:**\n- `image_path` (str): Path to the image file\n\n**Returns:**\n- `dict`: Analysis results containing:\n  - `prediction`: \"Real\" or \"Fake\"\n  - `confidence`: Confidence score (0-100)\n  - `model_version`: Model version string\n  - `heatmap_path`: Path to Grad-CAM visualization\n  - `limitations`: List of known limitations\n  - `explanation`: AI-generated explanation (if LLM available)\n\n## Technology Stack\n\n| Component | Technology |\n|-----------|------------|\n| Frontend | Streamlit |\n| Deep Learning | TensorFlow / Keras |\n| Model Architecture | Xception |\n| Explainability | Grad-CAM |\n| LLM | Google Gemma-3-1B |\n| Computer Vision | OpenCV |\n\n## Known Limitations\n\n- Limited cross-dataset generalization\n- Predictions should not be treated as definitive evidence\n- Requires 299x299 pixel input images\n- LLM explanations require Hugging Face authentication\n\n## Development\n\n### Project Structure\n\n```\n├── app.py              # Backend API\n├── streamlit_app.py    # Frontend application\n├── module/\n│   ├── detector.py     # Detection logic\n│   ├── gradcam.py      # Grad-CAM implementation\n│   └── llm.py          # Explanation generation\n├── requirements.txt    # Dependencies\n└── README.md          # Documentation\n```\n\n### Adding Features\n\n1. **Backend modifications**: Edit files in `module/`\n2. **Frontend modifications**: Edit `streamlit_app.py`\n3. **Styling**: Update CSS in `streamlit_app.py`\n\n## Troubleshooting\n\n### Model Not Found\n\n```\nFileNotFoundError: Model not found at models/veritas_xception_v2_finetuned.keras\n```\n\n**Solution**: Ensure the model file is placed in the `models/` directory.\n\n### LLM Not Loading\n\n```\n⚠️  Could not load LLM: ...\n```\n\n**Solution**: The app will use fallback explanations. To enable LLM:\n1. Set `HF_TOKEN` environment variable\n2. Ensure `transformers` and `torch` are installed\n\n### Memory Issues\n\n**Solution**: Reduce batch size or use CPU-only inference by setting:\n```bash\nexport CUDA_VISIBLE_DEVICES=\"\"\n```\n\n## License\n\nMIT License - See LICENSE file for details\n\n## Acknowledgments\n\n- Xception architecture by François Chollet\n- Grad-CAM implementation based on original paper\n- Google Gemma model by Google DeepMind\n\n---\n\n**Veritas AI** - Illuminating Truth in the Age of Synthetic Media\n[m
+\ No newline at end of file[m
+[32m+[m[32m# Veritas AI - Deepfake Detection Platform[m
+[32m+[m
+[32m+[m[32m[![Python](https://img.shields.io/badge/Python-3.9+-blue.svg)](https://python.org)[m
+[32m+[m[32m[![TensorFlow](https://img.shields.io/badge/TensorFlow-2.13+-orange.svg)](https://tensorflow.org)[m
+[32m+[m[32m[![Streamlit](https://img.shields.io/badge/Streamlit-1.28+-red.svg)](https://streamlit.io)[m
+[32m+[m
+[32m+[m[32mThis project evaluates a deepfake detector trained and evaluated on DFDC and tested cross-dataset on Celeb-DF v2. It also packages the model in a Streamlit app with Grad-CAM visualizations and optional LLM-based explanations.[m
+[32m+[m
+[32m+[m[32m## Research Findings[m
+[32m+[m
+[32m+[m[32m### What Was Tested[m
+[32m+[m
+[32m+[m[32mThe model was trained and evaluated on DFDC, then tested cross-dataset on Celeb-DF v2.[m
+[32m+[m
+[32m+[m[32m### Performance Delta[m
+[32m+[m
+[32m+[m[32mThe main comparison is between in-distribution performance on DFDC and cross-dataset performance on Celeb-DF v2.[m
+[32m+[m
+[32m+[m[32m| Evaluation setting | Result |[m
+[32m+[m[32m| --- | --- |[m
+[32m+[m[32m| DFDC (in-distribution) | [ACCURACY/AUC ON DFDC] |[m
+[32m+[m[32m| Celeb-DF v2 (cross-dataset) | [ACCURACY/AUC ON CELEB-DF V2] |[m
+[32m+[m
+[32m+[m[32mThe gap between these results shows how much performance can drop when the same detector is moved outside its training distribution.[m
+[32m+[m
+[32m+[m[32m### Failure Modes[m
+[32m+[m
+[32m+[m[32m#### Domain Shift[m
+[32m+[m
+[32m+[m[32mThe model sees a different data distribution in Celeb-DF v2, including changes in source material, face appearance, and capture conditions. Features that work well on DFDC can stop transferring cleanly once the input statistics change.[m
+[32m+[m
+[32m+[m[32m#### Compression Artifacts[m
+[32m+[m
+[32m+[m[32mVideo and image compression can blur or reshape the manipulation cues the detector relies on. In some cases, the model may also learn shortcuts from compression patterns instead of the deepfake signal itself.[m
+[32m+[m
+[32m+[m[32m#### Dataset Bias[m
+[32m+[m
+[32m+[m[32mIf the training data overrepresents certain identities, manipulation methods, or visual conditions, the detector can learn dataset-specific correlations. That can make it look strong on DFDC while still failing on a different dataset.[m
+[32m+[m
+[32m+[m[32m### Takeaway[m
+[32m+[m
+[32m+[m[32mDeepfake detectors can look strong on the data they were trained on and still fail when tested on a different dataset. That matters because real-world use rarely matches a single benchmark distribution, so cross-dataset evaluation is essential.[m
+[32m+[m
+[32m+[m[32m## Features[m
+[32m+[m
+[32m+[m[32m- **Deep Learning Detection**: Xception-based neural network trained for deepfake classification[m
+[32m+[m[32m- **Explainable AI**: Grad-CAM visualizations showing model attention regions[m
+[32m+[m[32m- **AI Explanations**: Natural language explanations powered by Google's Gemma LLM[m
+[32m+[m[32m- **Modern UI**: Professional dark-themed Streamlit interface[m
+[32m+[m[32m- **Production Ready**: Optimized for deployment on Streamlit Community Cloud[m
+[32m+[m
+[32m+[m[32m## Architecture[m
+[32m+[m
+[32m+[m[32m```[m
+[32m+[m[32mVeritas AI/[m
+[32m+[m[32m├── app.py                 # Main backend entry point[m
+[32m+[m[32m├── streamlit_app.py       # Streamlit frontend application[m
+[32m+[m[32m├── requirements.txt       # Python dependencies[m
+[32m+[m[32m├── module/[m
+[32m+[m[32m│   ├── detector.py        # Xception-based detection model[m
+[32m+[m[32m│   ├── gradcam.py         # Grad-CAM explainability[m
+[32m+[m[32m│   └── llm.py             # Gemma-based explanation generation[m
+[32m+[m[32m├── models/                # Model weights directory[m
+[32m+[m[32m└── outputs/               # Grad-CAM output directory[m
+[32m+[m[32m```[m
+[32m+[m
+[32m+[m[32m## Quick Start[m
+[32m+[m
+[32m+[m[32m### Local Development[m
+[32m+[m
+[32m+[m[32m1. **Clone the repository**[m
+[32m+[m[32m   ```bash[m
+[32m+[m[32m   git clone <repository-url>[m
+[32m+[m[32m   cd VeritasAI[m
+[32m+[m[32m   ```[m
+[32m+[m
+[32m+[m[32m2. **Create virtual environment**[m
+[32m+[m[32m   ```bash[m
+[32m+[m[32m   python -m venv venv[m
+[32m+[m[32m   source venv/bin/activate  # On Windows: venv\Scripts\activate[m
+[32m+[m[32m   ```[m
+[32m+[m
+[32m+[m[32m3. **Install dependencies**[m
+[32m+[m[32m   ```bash[m
+[32m+[m[32m   pip install -r requirements.txt[m
+[32m+[m[32m   ```[m
+[32m+[m
+[32m+[m[32m4. **Download model weights**[m
+[32m+[m
+[32m+[m[32m   Place the trained model file at:[m
+[32m+[m[32m   ```[m
+[32m+[m[32m   models/veritas_xception_v2_finetuned.keras[m
+[32m+[m[32m   ```[m
+[32m+[m
+[32m+[m[32m5. **Run the application**[m
+[32m+[m[32m   ```bash[m
+[32m+[m[32m   streamlit run streamlit_app.py[m
+[32m+[m[32m   ```[m
+[32m+[m
+[32m+[m[32m6. **Open in browser**[m
+[32m+[m
+[32m+[m[32m   Navigate to `http://localhost:8501`[m
+[32m+[m
+[32m+[m[32m### Streamlit Cloud Deployment[m
+[32m+[m
+[32m+[m[32m1. **Fork/Upload to GitHub**[m
+[32m+[m[32m   - Push the code to a GitHub repository[m
+[32m+[m
+[32m+[m[32m2. **Connect to Streamlit Cloud**[m
+[32m+[m[32m   - Go to [share.streamlit.io](https://share.streamlit.io)[m
+[32m+[m[32m   - Connect your GitHub account[m
+[32m+[m[32m   - Select the repository[m
+[32m+[m
+[32m+[m[32m3. **Configure Secrets (Optional)**[m
+[32m+[m
+[32m+[m[32m   For LLM explanations, add Hugging Face token:[m
+[32m+[m[32m   ```toml[m
+[32m+[m[32m   # .streamlit/secrets.toml[m
+[32m+[m[32m   HF_TOKEN = "your_huggingface_token"[m
+[32m+[m[32m   ```[m
+[32m+[m
+[32m+[m[32m4. **Deploy**[m
+[32m+[m[32m   - Click "Deploy" and wait for the build[m
+[32m+[m
+[32m+[m[32m## Backend Integration[m
+[32m+[m
+[32m+[m[32mThe frontend communicates with the backend through the `app.analyze_and_explain()` function:[m
+[32m+[m
+[32m+[m[32m```python[m
+[32m+[m[32mfrom app import analyze_and_explain[m
+[32m+[m
+[32m+[m[32mresult = analyze_and_explain(image_path)[m
+[32m+[m[32m# Returns: {[m
+[32m+[m[32m#     "prediction": "Real" | "Fake",[m
+[32m+[m[32m#     "confidence": 87.5,[m
+[32m+[m[32m#     "model_version": "Veritas AI v2",[m
+[32m+[m[32m#     "heatmap_path": "outputs/image_gradcam.jpg",[m
+[32m+[m[32m#     "limitations": [...],[m
+[32m+[m[32m#     "explanation": "AI-generated explanation..."[m
+[32m+[m[32m# }[m
+[32m+[m[32m```[m
+[32m+[m
+[32m+[m[32m## Model Requirements[m
+[32m+[m
+[32m+[m[32m### Required Files[m
+[32m+[m
+[32m+[m[32m- **Model**: `models/veritas_xception_v2_finetuned.keras`[m
+[32m+[m[32m  - Xception-based deepfake detection model[m
+[32m+[m[32m  - Input size: 299x299 pixels[m
+[32m+[m[32m  - Output: Binary classification (Real/Fake)[m
+[32m+[m
+[32m+[m[32m### Optional (for LLM explanations)[m
+[32m+[m
+[32m+[m[32m- **Hugging Face Token**: Required to download Google Gemma model[m
+[32m+[m[32m- **GPU**: Recommended for faster inference[m
+[32m+[m
+[32m+[m[32m## API Reference[m
+[32m+[m
+[32m+[m[32m### `app.analyze_and_explain(image_path)`[m
+[32m+[m
+[32m+[m[32mMain entry point for image analysis.[m
+[32m+[m
+[32m+[m[32m**Parameters:**[m
+[32m+[m[32m- `image_path` (str): Path to the image file[m
+[32m+[m
+[32m+[m[32m**Returns:**[m
+[32m+[m[32m- `dict`: Analysis results containing:[m
+[32m+[m[32m  - `prediction`: "Real" or "Fake"[m
+[32m+[m[32m  - `confidence`: Confidence score (0-100)[m
+[32m+[m[32m  - `model_version`: Model version string[m
+[32m+[m[32m  - `heatmap_path`: Path to Grad-CAM visualization[m
+[32m+[m[32m  - `limitations`: List of known limitations[m
+[32m+[m[32m  - `explanation`: AI-generated explanation (if LLM available)[m
+[32m+[m
+[32m+[m[32m## Technology Stack[m
+[32m+[m
+[32m+[m[32m| Component | Technology |[m
+[32m+[m[32m|-----------|------------|[m
+[32m+[m[32m| Frontend | Streamlit |[m
+[32m+[m[32m| Deep Learning | TensorFlow / Keras |[m
+[32m+[m[32m| Model Architecture | Xception |[m
+[32m+[m[32m| Explainability | Grad-CAM |[m
+[32m+[m[32m| LLM | Google Gemma-3-1B |[m
+[32m+[m[32m| Computer Vision | OpenCV |[m
+[32m+[m
+[32m+[m[32m## Known Limitations[m
+[32m+[m
+[32m+[m[32m- Limited cross-dataset generalization[m
+[32m+[m[32m- Predictions should not be treated as definitive evidence[m
+[32m+[m[32m- Requires 299x299 pixel input images[m
+[32m+[m[32m- LLM explanations require Hugging Face authentication[m
+[32m+[m
+[32m+[m[32m## Development[m
+[32m+[m
+[32m+[m[32m### Project Structure[m
+[32m+[m
+[32m+[m[32m```[m
+[32m+[m[32m├── app.py              # Backend API[m
+[32m+[m[32m├── streamlit_app.py    # Frontend application[m
+[32m+[m[32m├── module/[m
+[32m+[m[32m│   ├── detector.py     # Detection logic[m
+[32m+[m[32m│   ├── gradcam.py      # Grad-CAM implementation[m
+[32m+[m[32m│   └── llm.py          # Explanation generation[m
+[32m+[m[32m├── requirements.txt    # Dependencies[m
+[32m+[m[32m└── README.md          # Documentation[m
+[32m+[m[32m```[m
+[32m+[m
+[32m+[m[32m### Adding Features[m
+[32m+[m
+[32m+[m[32m1. **Backend modifications**: Edit files in `module/`[m
+[32m+[m[32m2. **Frontend modifications**: Edit `streamlit_app.py`[m
+[32m+[m[32m3. **Styling**: Update CSS in `streamlit_app.py`[m
+[32m+[m
+[32m+[m[32m## Troubleshooting[m
+[32m+[m
+[32m+[m[32m### Model Not Found[m
+[32m+[m
+[32m+[m[32m```[m
+[32m+[m[32mFileNotFoundError: Model not found at models/veritas_xception_v2_finetuned.keras[m
+[32m+[m[32m```[m
+[32m+[m
+[32m+[m[32m**Solution**: Ensure the model file is placed in the `models/` directory.[m
+[32m+[m
+[32m+[m[32m### LLM Not Loading[m
+[32m+[m
+[32m+[m[32m```[m
+[32m+[m[32m⚠️  Could not load LLM: ...[m
+[32m+[m[32m```[m
+[32m+[m
+[32m+[m[32m**Solution**: The app will use fallback explanations. To enable LLM:[m
+[32m+[m[32m1. Set `HF_TOKEN` environment variable[m
+[32m+[m[32m2. Ensure `transformers` and `torch` are installed[m
+[32m+[m
+[32m+[m[32m### Memory Issues[m
+[32m+[m
+[32m+[m[32m**Solution**: Reduce batch size or use CPU-only inference by setting:[m
+[32m+[m[32m```bash[m
+[32m+[m[32mexport CUDA_VISIBLE_DEVICES=""[m
+[32m+[m[32m```[m
+[32m+[m
+[32m+[m[32m## License[m
+[32m+[m
+[32m+[m[32mMIT License - See LICENSE file for details[m
+[32m+[m
+[32m+[m[32m## Acknowledgments[m
+[32m+[m
+[32m+[m[32m- Xception architecture by Francois Chollet[m
+[32m+[m[32m- Grad-CAM implementation based on original paper[m
+[32m+[m[32m- Google Gemma model by Google DeepMind[m
+[32m+[m
+[32m+[m[32m---[m
+[32m+[m
+[32m+[m[32m**Veritas AI** - Illuminating Truth in the Age of Synthetic Media[m

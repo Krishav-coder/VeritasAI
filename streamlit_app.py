@@ -443,6 +443,7 @@ def render_preview(image_path: str, file_name: str, file_size_bytes: int) -> Non
                 st.warning("The uploaded image could not be previewed.")
 
 
+
 def render_analysis_button() -> bool:
     """Render the analyze button."""
     with st.container(border=True):

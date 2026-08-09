@@ -3,7 +3,8 @@ dataset/
 models/
 # Generated outputs
 outputs/
-
+#virtual environment 
+.venv/ 
 # Python cache
 __pycache__/
 *.pyc
