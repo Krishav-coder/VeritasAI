@@ -1,8 +1,9 @@
 # Dataset
 dataset/
 models/
-# Generated outputs
+# Generated outputs and uploaded files 
 outputs/
+temp/
 #virtual environment 
 .venv/ 
 # Python cache
