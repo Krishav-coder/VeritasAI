@@ -27,6 +27,295 @@ st.set_page_config(
 )
 
 
+def inject_custom_css() -> None:
+    """Apply Veritas AI's dark glass interface without altering app behavior."""
+    st.markdown(
+        """
+        <style>
+        @import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=JetBrains+Mono:wght@400;500;600&family=Space+Grotesk:wght@500;600;700&display=swap');
+
+        :root {
+            --veritas-bg: #080a0f;
+            --veritas-surface: rgba(18, 22, 34, 0.60);
+            --veritas-surface-strong: rgba(20, 25, 39, 0.78);
+            --veritas-border: rgba(255, 255, 255, 0.08);
+            --veritas-text: #f3f4f6;
+            --veritas-muted: #9ca3af;
+            --veritas-cyan: #06b6d4;
+            --veritas-purple: #8b5cf6;
+        }
+
+        .stApp,
+        [data-testid="stAppViewContainer"] {
+            color: var(--veritas-text);
+            background:
+                radial-gradient(circle at 8% 4%, rgba(139, 92, 246, 0.08), transparent 28rem),
+                radial-gradient(circle at 92% 12%, rgba(6, 182, 212, 0.08), transparent 25rem),
+                var(--veritas-bg);
+            font-family: 'Inter', sans-serif;
+        }
+
+        [data-testid="stHeader"], [data-testid="stToolbar"], #MainMenu, footer {
+            visibility: hidden;
+        }
+
+        .block-container {
+            max-width: 1180px;
+            padding: 2.5rem 1.5rem 3rem;
+        }
+
+        h1, h2, h3, h4, h5, h6,
+        [data-testid="stMarkdownContainer"] h1,
+        [data-testid="stMarkdownContainer"] h2,
+        [data-testid="stMarkdownContainer"] h3 {
+            color: var(--veritas-text) !important;
+            font-family: 'Space Grotesk', 'Inter', sans-serif;
+            letter-spacing: -0.035em;
+        }
+
+        h1, [data-testid="stMarkdownContainer"] h1 {
+            font-size: clamp(2.5rem, 6vw, 4.5rem) !important;
+            line-height: 1.02;
+            font-weight: 700;
+            background: linear-gradient(115deg, #ffffff 20%, #c4b5fd 57%, #67e8f9 100%);
+            -webkit-background-clip: text;
+            background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+
+        p, li, label, [data-testid="stCaptionContainer"],
+        [data-testid="stMarkdownContainer"] p {
+            color: var(--veritas-muted) !important;
+        }
+
+        [data-testid="stCaptionContainer"] {
+            font-size: 0.83rem;
+            letter-spacing: 0.01em;
+        }
+
+        code, pre, .pipeline-spec, [data-testid="stMetricLabel"] {
+            font-family: 'JetBrains Mono', monospace;
+        }
+
+        hr, [data-testid="stDivider"] {
+            border-color: rgba(255, 255, 255, 0.07) !important;
+            margin: 1.75rem 0 !important;
+        }
+
+        /* Shared glass cards: only Streamlit's explicit bordered containers become cards. */
+        div[data-testid="stVerticalBlockBorderWrapper"] {
+            background: var(--veritas-surface);
+            backdrop-filter: blur(10px);
+            -webkit-backdrop-filter: blur(10px);
+            border: 1px solid var(--veritas-border);
+            border-radius: 12px;
+            box-shadow: 0 12px 34px rgba(0, 0, 0, 0.16);
+            overflow: hidden;
+        }
+
+        div[data-testid="stVerticalBlockBorderWrapper"] > div {
+            padding: 0.15rem 0.15rem !important;
+        }
+
+        /* Keep nested content clean instead of turning every block into another box. */
+        div[data-testid="stVerticalBlockBorderWrapper"] div[data-testid="stVerticalBlockBorderWrapper"] {
+            background: transparent;
+            backdrop-filter: none;
+            border: 0;
+            border-radius: 0;
+            box-shadow: none;
+        }
+
+        section[data-testid="stFileUploader"] {
+            border: 0 !important;
+            background: transparent !important;
+        }
+
+        section[data-testid="stFileUploader"] > div,
+        section[data-testid="stFileUploaderDropzone"] {
+            min-height: 172px;
+            background: rgba(18, 22, 34, 0.50) !important;
+            border: 1px dashed rgba(6, 182, 212, 0.30) !important;
+            border-radius: 12px !important;
+            transition: border-color 180ms ease, background 180ms ease, box-shadow 180ms ease;
+        }
+
+        section[data-testid="stFileUploader"] > div:hover,
+        section[data-testid="stFileUploaderDropzone"]:hover {
+            background: rgba(6, 182, 212, 0.06) !important;
+            border-color: rgba(6, 182, 212, 0.82) !important;
+            box-shadow: 0 0 0 4px rgba(6, 182, 212, 0.07), 0 0 28px rgba(6, 182, 212, 0.10);
+        }
+
+        section[data-testid="stFileUploader"] small,
+        section[data-testid="stFileUploader"] span,
+        section[data-testid="stFileUploader"] p {
+            color: var(--veritas-muted) !important;
+        }
+
+        section[data-testid="stFileUploader"] button,
+        .stDownloadButton > button {
+            color: #cffafe !important;
+            background: rgba(6, 182, 212, 0.10) !important;
+            border: 1px solid rgba(6, 182, 212, 0.32) !important;
+            border-radius: 8px !important;
+            font-weight: 600;
+        }
+
+        .stButton > button {
+            min-height: 2.85rem;
+            color: #fff !important;
+            background: linear-gradient(135deg, #7c3aed 0%, var(--veritas-purple) 50%, #a855f7 100%) !important;
+            border: 1px solid rgba(196, 181, 253, 0.36) !important;
+            border-radius: 9px !important;
+            box-shadow: 0 12px 28px rgba(139, 92, 246, 0.22);
+            font-weight: 700;
+            transition: transform 160ms ease, box-shadow 160ms ease;
+        }
+
+        .stButton > button:hover {
+            transform: translateY(-1px);
+            box-shadow: 0 16px 34px rgba(139, 92, 246, 0.30);
+        }
+
+        div[data-testid="stAlert"] {
+            gap: 0.5rem;
+            padding: 0.65rem 0.8rem !important;
+            background: rgba(18, 22, 34, 0.58) !important;
+            border: 1px solid rgba(6, 182, 212, 0.20) !important;
+            border-radius: 9px !important;
+            color: var(--veritas-muted) !important;
+            font-size: 0.875rem !important;
+            box-shadow: none !important;
+        }
+
+        div[data-testid="stAlert"] p,
+        div[data-testid="stAlert"] div {
+            color: var(--veritas-muted) !important;
+            font-size: 0.875rem !important;
+        }
+
+        div[data-testid="stAlert"] svg { color: var(--veritas-cyan) !important; }
+        div[data-testid="stAlert"][data-baseweb="notification"] { border-color: rgba(245, 158, 11, 0.25) !important; }
+
+        div[data-testid="stMetric"] {
+            padding: 0.8rem 0 !important;
+            background: transparent !important;
+            border: 0 !important;
+        }
+
+        [data-testid="stMetricLabel"] {
+            color: var(--veritas-muted) !important;
+            font-size: 0.68rem !important;
+            font-weight: 500;
+            letter-spacing: 0.11em;
+            text-transform: uppercase;
+        }
+
+        [data-testid="stMetricValue"] {
+            color: var(--veritas-text) !important;
+            font-family: 'Space Grotesk', sans-serif;
+            font-size: 1.55rem !important;
+        }
+
+        [data-testid="stExpander"] {
+            background: rgba(8, 10, 15, 0.32) !important;
+            border: 1px solid var(--veritas-border) !important;
+            border-radius: 9px !important;
+        }
+
+        [data-testid="stImage"] img { border-radius: 10px; }
+
+        .veritas-eyebrow {
+            display: inline-flex;
+            align-items: center;
+            gap: 0.45rem;
+            margin-bottom: 0.75rem;
+            color: #a5f3fc;
+            font-family: 'JetBrains Mono', monospace;
+            font-size: 0.70rem;
+            font-weight: 600;
+            letter-spacing: 0.08em;
+            text-transform: uppercase;
+        }
+
+        .veritas-eyebrow::before {
+            width: 0.45rem;
+            height: 0.45rem;
+            border-radius: 50%;
+            background: var(--veritas-cyan);
+            box-shadow: 0 0 11px var(--veritas-cyan);
+            content: '';
+        }
+
+        .pipeline-panel, .capability-card {
+            background: var(--veritas-surface);
+            border: 1px solid var(--veritas-border);
+            border-radius: 12px;
+            backdrop-filter: blur(10px);
+            -webkit-backdrop-filter: blur(10px);
+        }
+
+        .pipeline-panel { padding: 1.1rem 1.2rem; }
+        .pipeline-title {
+            margin-bottom: 0.8rem;
+            color: var(--veritas-muted);
+            font-family: 'JetBrains Mono', monospace;
+            font-size: 0.68rem;
+            letter-spacing: 0.1em;
+            text-transform: uppercase;
+        }
+
+        .pipeline-item {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            gap: 0.75rem;
+            padding: 0.55rem 0;
+            border-top: 1px solid rgba(255, 255, 255, 0.06);
+        }
+
+        .pipeline-item:first-of-type { border-top: 0; }
+        .pipeline-label { color: #9ca3af; font-family: 'JetBrains Mono', monospace; font-size: 0.72rem; }
+        .pipeline-pill {
+            padding: 0.23rem 0.55rem;
+            border: 1px solid rgba(6, 182, 212, 0.24);
+            border-radius: 999px;
+            color: #a5f3fc;
+            background: rgba(6, 182, 212, 0.08);
+            font-family: 'JetBrains Mono', monospace;
+            font-size: 0.70rem;
+        }
+
+        .capability-card { min-height: 168px; padding: 1.25rem; }
+        .capability-icon {
+            display: grid;
+            width: 2.25rem;
+            height: 2.25rem;
+            margin-bottom: 0.85rem;
+            place-items: center;
+            border: 1px solid rgba(139, 92, 246, 0.30);
+            border-radius: 8px;
+            color: #c4b5fd;
+            background: rgba(139, 92, 246, 0.10);
+        }
+        .capability-card h3 { margin: 0 0 0.4rem; font-size: 1.05rem; }
+        .capability-card p { margin: 0; font-size: 0.88rem; line-height: 1.65; }
+
+        @media (max-width: 768px) {
+            .block-container { padding: 1.5rem 1rem 2rem; }
+            h1, [data-testid="stMarkdownContainer"] h1 { font-size: 2.7rem !important; }
+        }
+        </style>
+        """,
+        unsafe_allow_html=True,
+    )
+
+
+# Style setup must run directly after Streamlit page configuration.
+inject_custom_css()
+
+
 # =============================================================================
 # PATH SETUP
 # =============================================================================
@@ -57,174 +346,6 @@ ANALYSIS_RESULT_KEY = "veritas_analysis_result"
 ANALYSIS_ERROR_KEY = "veritas_analysis_error"
 RESULT_ANIMATE_KEY = "veritas_result_animate"
 ANALYSIS_TIMESTAMP_KEY = "veritas_analysis_timestamp"
-
-
-# =============================================================================
-# STYLING
-# =============================================================================
-
-def load_custom_css() -> None:
-    """Inject a compact dark theme without depending on HTML-heavy rendering."""
-    st.markdown(
-        """
-        <style>
-        :root {
-            --veritas-bg-0: #07111f;
-            --veritas-bg-1: #0b1324;
-            --veritas-panel: rgba(15, 23, 42, 0.68);
-            --veritas-border: rgba(148, 163, 184, 0.18);
-            --veritas-text: #e5eefb;
-            --veritas-muted: #9fb0c8;
-            --veritas-accent: #7c8cff;
-            --veritas-accent-2: #66e3b5;
-            --veritas-warning: #ffbf69;
-            --veritas-danger: #ff7b7b;
-        }
-
-        [data-testid="stAppViewContainer"] {
-            background:
-                radial-gradient(circle at 10% 10%, rgba(124, 140, 255, 0.18), transparent 32%),
-                radial-gradient(circle at 90% 0%, rgba(102, 227, 181, 0.12), transparent 26%),
-                linear-gradient(180deg, var(--veritas-bg-0) 0%, var(--veritas-bg-1) 48%, var(--veritas-bg-0) 100%);
-        }
-
-        [data-testid="stHeader"],
-        [data-testid="stToolbar"],
-        #MainMenu,
-        footer {
-            visibility: hidden;
-        }
-
-        .block-container {
-            padding-top: 2rem;
-            padding-bottom: 2.5rem;
-            max-width: 1240px;
-        }
-
-        body,
-        .stApp,
-        [data-testid="stAppViewContainer"] {
-            color: var(--veritas-text);
-        }
-
-        h1, h2, h3, h4, h5, h6,
-        p, li, label, small {
-            color: var(--veritas-text);
-        }
-
-        [data-testid="stCaptionContainer"] {
-            color: var(--veritas-muted) !important;
-        }
-
-        .stButton > button {
-            background: linear-gradient(135deg, #6676ff 0%, #8b5cf6 100%);
-            color: white;
-            border: 0;
-            border-radius: 0.9rem;
-            font-weight: 700;
-            padding: 0.85rem 1.15rem;
-            box-shadow: 0 14px 35px rgba(99, 102, 241, 0.22);
-        }
-
-        .stButton > button:hover {
-            transform: translateY(-1px);
-            box-shadow: 0 18px 38px rgba(99, 102, 241, 0.28);
-        }
-
-        section[data-testid="stFileUploaderDropzone"] {
-            background: rgba(15, 23, 42, 0.55);
-            border: 1px dashed rgba(148, 163, 184, 0.28);
-            border-radius: 1rem;
-        }
-
-        div[data-testid="stMetric"] {
-            background: rgba(15, 23, 42, 0.55);
-            border: 1px solid var(--veritas-border);
-            border-radius: 1rem;
-        }
-
-        div[data-testid="stMetricLabel"],
-        div[data-testid="stMetricValue"],
-        div[data-testid="stMetricDelta"] {
-            color: var(--veritas-text) !important;
-        }
-
-        div[data-testid="stMetricLabel"] {
-            text-transform: uppercase;
-            letter-spacing: 0.08em;
-            font-size: 0.72rem !important;
-            color: var(--veritas-muted) !important;
-        }
-
-        div[data-testid="stMetricValue"] {
-            font-size: 1.9rem !important;
-            font-weight: 800 !important;
-        }
-
-        div[data-testid="stExpander"] {
-            background: rgba(15, 23, 42, 0.55);
-            border: 1px solid var(--veritas-border);
-            border-radius: 1rem;
-        }
-
-        div[data-testid="stAlert"] {
-            border-radius: 1rem;
-        }
-
-        div[data-testid="stVerticalBlockBorderWrapper"] {
-            background: rgba(10, 18, 35, 0.72);
-            border: 1px solid rgba(148, 163, 184, 0.16);
-            border-radius: 1.25rem;
-            box-shadow: 0 16px 40px rgba(0, 0, 0, 0.18);
-            transition: transform 160ms ease, box-shadow 160ms ease, border-color 160ms ease;
-        }
-
-        div[data-testid="stVerticalBlockBorderWrapper"]:hover {
-            transform: translateY(-2px);
-            border-color: rgba(124, 140, 255, 0.38);
-            box-shadow: 0 20px 50px rgba(7, 17, 31, 0.35);
-        }
-
-        div[data-testid="stImage"] img {
-            border-radius: 1rem;
-        }
-
-        div[data-testid="stMarkdownContainer"] p {
-            line-height: 1.72;
-        }
-
-        div[data-testid="stMarkdownContainer"] li {
-            line-height: 1.7;
-            margin-bottom: 0.3rem;
-        }
-
-        div[data-testid="stProgress"] {
-            min-height: 1.1rem;
-        }
-
-        div[data-testid="stProgress"] > div,
-        div[data-testid="stProgressBar"] > div {
-            min-height: 1.1rem !important;
-        }
-
-        div[data-testid="stProgress"] > div > div,
-        div[data-testid="stProgressBar"] > div > div,
-        div[data-testid="stProgressBar"] > div > div > div {
-            min-height: 1.1rem !important;
-            border-radius: 999px !important;
-        }
-
-        @media (max-width: 768px) {
-            .block-container {
-                padding-left: 1rem;
-                padding-right: 1rem;
-                padding-top: 1rem;
-            }
-        }
-        </style>
-        """,
-        unsafe_allow_html=True,
-    )
 
 
 # =============================================================================
@@ -367,9 +488,9 @@ def render_hero() -> None:
     left_col, right_col = st.columns([1.55, 0.95], gap="large")
 
     with left_col:
-        st.badge("AI-Powered Detection", icon="🔍", color="blue")
+        st.markdown('<div class="veritas-eyebrow">AI-Powered Detection</div>', unsafe_allow_html=True)
         st.title("Veritas AI")
-        st.subheader("Advanced Deepfake Detection Platform")
+        st.subheader("Forensic deepfake detection, made legible.")
         st.write(
             "Veritas AI combines a finetuned Xception detector, Grad-CAM visual evidence, "
             "and Gemma-assisted explanations into one forensic workflow."
@@ -377,11 +498,17 @@ def render_hero() -> None:
         st.caption("Built for responsible review, not automated judgment.")
 
     with right_col:
-        with st.container(border=True):
-            st.caption("Pipeline overview")
-            st.metric("Detector", "Xception")
-            st.metric("Explainability", "Grad-CAM")
-            st.metric("Language model", "Gemma")
+        st.markdown(
+            """
+            <section class="pipeline-panel" aria-label="Pipeline overview">
+                <div class="pipeline-title">Pipeline overview</div>
+                <div class="pipeline-item"><span class="pipeline-label">Detector</span><span class="pipeline-pill">Xception</span></div>
+                <div class="pipeline-item"><span class="pipeline-label">Explainability</span><span class="pipeline-pill">Grad-CAM</span></div>
+                <div class="pipeline-item"><span class="pipeline-label">LLM</span><span class="pipeline-pill">Gemma</span></div>
+            </section>
+            """,
+            unsafe_allow_html=True,
+        )
 
 
 def render_features() -> None:
@@ -391,28 +518,21 @@ def render_features() -> None:
     col1, col2, col3 = st.columns(3, gap="medium")
 
     cards = [
-        {
-            "icon": "🧠",
-            "title": "Deep Learning",
-            "description": "Xception-based architecture trained for deepfake classification with production-oriented inference.",
-        },
-        {
-            "icon": "🔍",
-            "title": "Explainable AI",
-            "description": "Grad-CAM visualizations reveal where the model focuses when deciding whether an image is real or fake.",
-        },
-        {
-            "icon": "🤖",
-            "title": "AI Explanations",
-            "description": "Natural-language analysis generated by Gemma to help translate the detector output into readable insight.",
-        },
+        ("Deep Learning", "Xception-based architecture trained for deepfake classification with production-oriented inference.", "◈"),
+        ("Explainable AI", "Grad-CAM visualizations reveal where the model focuses when deciding whether an image is real or fake.", "⌁"),
+        ("AI Explanations", "Natural-language analysis generated by Gemma to translate detector output into readable insight.", "✦"),
     ]
 
     for column, card in zip((col1, col2, col3), cards):
         with column:
-            with st.container(border=True):
-                st.markdown(f"### {card['icon']} {card['title']}")
-                st.write(card["description"])
+            title, description, icon = card
+            st.markdown(
+                f'''<article class="capability-card">
+                    <span class="capability-icon" aria-hidden="true">{icon}</span>
+                    <h3>{title}</h3><p>{description}</p>
+                </article>''',
+                unsafe_allow_html=True,
+            )
 
 
 def render_upload() -> Any | None:
@@ -606,7 +726,6 @@ def render_footer() -> None:
 def main() -> None:
     """Main application entry point."""
     initialize_state()
-    load_custom_css()
 
     render_hero()
     st.divider()
